@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDao {
             return session.createQuery("FROM User", User.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new ArrayList<>();  //Or return no data found.
         }
     }
 
