@@ -51,12 +51,12 @@ public class UserController {
 
     // GET API: Fetches a user by username.
     @GetMapping("/getUser/{username}")
-    public User getUser(@PathVariable String username) {
+    public Object getUser(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
         if (user != null) {
             return user;
         } else {
-            return null;
+            return "User: " + username + " Not Found.";
         }
     }
 
