@@ -3,12 +3,11 @@ package com.jbk.dao;
 import com.jbk.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.ArrayList;
-
-
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -35,7 +34,8 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    //POST API /auth/login: Authenticates a user based on the provided credentials.
+    //POST API: /user/login: Authenticates a user based on the provided credentials.
+    //GET API: /user/getUser/{username}: Fetches a user by username.
     @Override
     public User getUserByUsername(String username) {
         try {
@@ -47,6 +47,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    //GET API: /user/allUsers: Retrieves a list of all registered users.
     @Override
     public List<User> getAllUsers() {
         try {
@@ -58,35 +59,32 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    /*@Override
-    public User getUserByUsername(String username) {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            return session.get(User.class, username);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
-
+    //PUT API: /user/updateUser: Updates user details.
     @Override
     public boolean updateUser(User user) {
-        try {
-            Session session = sessionFactory.openSession ();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
             User existingUser = session.get(User.class, user.getUsername());
             if (existingUser != null) {
-                session.evict(existingUser); // Optional to detach the existing entity.
+                session.evict(existingUser);
                 session.update(user);
-                session.beginTransaction ().commit ();
+                transaction.commit();
                 return true;
+            } else {
+                transaction.rollback();
+                return false;
             }
-            return false;
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
             return false;
         }
     }
 
+    //DELETE API: /user/deleteUser/{username}: Deletes a user by username.
     @Override
     public boolean deleteUser(String username) {
         try {
