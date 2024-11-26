@@ -1,5 +1,6 @@
 package com.jbk.dao;
 
+import com.jbk.dto.LoginRequest;
 import com.jbk.entities.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -99,6 +100,22 @@ public class UserDaoImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    //Additonal Method to Authenticate the user.
+    @Override
+    public User loginUser(LoginRequest loginRequest){
+        try {
+            Session session = sessionFactory.openSession ();
+            User dbUser =  session.get(User.class, loginRequest.getUsername ());
+            if (dbUser != null && dbUser.getPassword ().equals(loginRequest.getPassword ())) {
+                return dbUser;
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
