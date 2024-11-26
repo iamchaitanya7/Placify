@@ -1,6 +1,7 @@
 package com.jbk.service;
 
 import com.jbk.dao.UserDao;
+import com.jbk.dto.LoginRequest;
 import com.jbk.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteUser(String username) {
         return userDao.deleteUser(username);
+    }
+
+    //Additional method to Authenticate the user (AuthController usage)
+    @Override
+    public User loginUser(LoginRequest loginRequest){
+        try {
+            return userDao.loginUser(loginRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 
