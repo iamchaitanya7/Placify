@@ -1,7 +1,6 @@
 package com.jbk.controller;
 
 import com.jbk.entities.Student;
-import com.jbk.entities.User;
 import com.jbk.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
