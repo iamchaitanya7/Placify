@@ -81,18 +81,23 @@ public class JobPostingDaoImpl implements JobPostingDao {
             transaction = session.beginTransaction();
             JobPosting existingJobPosting = session.get(JobPosting.class, jobPosting.getId());
             if (existingJobPosting != null) {
+                session.evict(existingJobPosting);
                 session.update(jobPosting);
                 transaction.commit();
                 return 1;
             } else {
+                transaction.rollback();
                 return 2;
             }
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null && transaction.getStatus().canRollback()) {
+                transaction.rollback();
+            }
             e.printStackTrace();
             return 3;
         }
     }
+
 
     @Override
     public int saveMultipleJobs(List<JobPosting> jobPostings) {
