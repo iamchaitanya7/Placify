@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -12,17 +14,26 @@ public class User {
 
     @Id
     @Column(name = "username", nullable = false, unique = true)
+    @NotBlank(message = "Invalid Username!")
     private String username;
 
+    @NotBlank
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
+            message = "Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character."
+    )
     @Column(name = "password", nullable = false)
     private String password;
 
+    @NotBlank(message = "Invalid Question!")
     @Column(name = "question", nullable = false)
     private String question;
 
+    @NotBlank(message = "Invalid Answer!")
     @Column(name = "answer", nullable = false)
     private String answer;
 
+    @NotBlank(message = "Invalid Role!")
     @Column(name = "role", nullable = false)
     private String role;
 
