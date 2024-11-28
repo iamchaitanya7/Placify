@@ -2,6 +2,7 @@ package com.jbk.controller;
 
 import com.jbk.entities.User;
 import com.jbk.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,8 @@ public class UserController {
 
     //POST API: /user/createUser: Creates a new user record.
     @PostMapping("/create-user")
-    public String createUser(@RequestBody User user){
+    public String createUser(@RequestBody @Valid User user){
+        System.out.println ("Inside Controller.!");
         int status = userService.createUser(user);
         switch (status) {
             case 1:
