@@ -52,14 +52,11 @@ public class UserController {
     }
 
     // GET API: Fetches a user by username.
+    //Updated in accordance with Custom Exception Handling.
     @GetMapping("/getUser/{username}")
     public Object getUser(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
-        if (user != null) {
-            return user;
-        } else {
-            return "User: " + username + " Not Found.";
-        }
+        return user;
     }
 
     // PUT API: Updates user details.

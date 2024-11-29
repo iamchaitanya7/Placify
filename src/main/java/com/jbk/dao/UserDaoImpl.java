@@ -2,6 +2,7 @@ package com.jbk.dao;
 
 import com.jbk.dto.LoginRequest;
 import com.jbk.entities.User;
+import com.jbk.exception.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -35,9 +36,10 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    //Regular Method without Exception Handling.
     //POST API: /user/login: Authenticates a user based on the provided credentials.
     //GET API: /user/getUser/{username}: Fetches a user by username.
-    @Override
+    /*@Override
     public User getUserByUsername(String username) {
         try {
             Session session = sessionFactory.openSession ();
@@ -45,6 +47,19 @@ public class UserDaoImpl implements UserDao {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }*/
+
+
+    //Custom Exception Handling.
+    @Override
+    public User getUserByUsername (String username) {
+        Session session = sessionFactory.openSession ( );
+        User user = session.get (User.class, username);
+        if (user != null) {
+            return user;
+        } else {
+            throw new ResourceNotFoundException ("User: " + username + " Not Found");
         }
     }
 
