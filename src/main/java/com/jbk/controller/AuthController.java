@@ -17,17 +17,17 @@ public class AuthController {
     UserService userService;
 
     @GetMapping("/loginUser")
-    public Object deleteUser(@RequestBody LoginRequest loginRequest){
+    public Object deleteUser (@RequestBody LoginRequest loginRequest) {
         try {
-        User user = userService.loginUser(loginRequest);
-        if (user != null) {
-            return user;
-        } else {
-            return "Invalid username or password";
+            User user = userService.loginUser (loginRequest);
+            if (user != null) {
+                return user;
+            } else {
+                return "Invalid username or password";
+            }
+        } catch (Exception e) {
+            e.printStackTrace ( );
+            return "An error occurred while processing the request";
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "An error occurred while processing the request";
-    }
     }
 }
